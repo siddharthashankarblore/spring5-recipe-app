@@ -6,6 +6,7 @@ import springframework.commands.RecipeCommand;
 import springframework.converters.RecipeCommandToRecipe;
 import springframework.converters.RecipeToRecipeCommand;
 import springframework.domain.Recipe;
+import springframework.exceptions.NotFoundException;
 import springframework.repositories.RecipeRepository;
 
 import javax.transaction.Transactional;
@@ -42,7 +43,8 @@ public class RecipeServiceImpl implements RecipeService {
         Optional<Recipe> optionalRecipe = recipeRepository.findById(id);
 
         if(!optionalRecipe.isPresent()){
-            throw new RuntimeException("Recipe Not Found");
+            //throw new RuntimeException("Recipe Not Found");
+            throw new NotFoundException("Recipe Not Found");
         }
         return optionalRecipe.get();
     }

@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import springframework.commands.RecipeCommand;
 import springframework.domain.Recipe;
+import springframework.exceptions.NotFoundException;
 import springframework.services.RecipeService;
 
 import static com.sun.javaws.JnlpxArgs.verify;
@@ -104,5 +105,13 @@ public class RecipeControllerTest {
                 .andExpect(view().name("redirect:/"));
 
         Mockito.verify(recipeService, times(1)).deleteById(anyLong());
+    }
+
+    @Test
+    public void testGetRecipeNotFound() throws Exception {
+        when(recipeService.findById(anyLong())).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(get("/recipe/1/show"))
+                .andExpect(status().isNotFound());
     }
 }

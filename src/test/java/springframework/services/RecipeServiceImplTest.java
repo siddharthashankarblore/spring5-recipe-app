@@ -8,6 +8,7 @@ import springframework.commands.RecipeCommand;
 import springframework.converters.RecipeCommandToRecipe;
 import springframework.converters.RecipeToRecipeCommand;
 import springframework.domain.Recipe;
+import springframework.exceptions.NotFoundException;
 import springframework.repositories.RecipeRepository;
 
 import java.util.HashSet;
@@ -113,5 +114,17 @@ public class RecipeServiceImplTest {
         //then
         verify(recipeRepository, times(1)).deleteById(anyLong());
 
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void getRecipeByIdTestNotFound() throws Exception {
+
+        Optional<Recipe> recipeOptional = Optional.empty();
+
+        when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+
+        Recipe recipeReturned = recipeService.findById(1L);
+
+        //should go boom
     }
 }
